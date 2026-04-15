@@ -1,8 +1,79 @@
 #include <iostream>
 #include <random>
 #include <iterator>
+#include <vector>
 using namespace std;
-
+class Equipment{
+    private:
+        string rarity;
+        string slot;
+    public:
+        int power;
+        int bonus=0;
+        string name;
+        double Weight;
+        Equipment(){rarity = "rarity";name = "name"; slot = "slot";bonus = 0;power=0;};
+        Equipment(string rarity, string name,string slot,int bonus = 0){
+            random_device r;
+            mt19937 rng(r());
+            int x;
+            int y;
+            int a = 1;
+            int z;
+            this->rarity = rarity;
+            this->name = name;
+            this->slot = slot;
+            if (rarity == "Common"){
+                x = 1;
+                y = 149;
+                this->Weight = 50.0;
+            } else if (rarity == "Rare"){
+                x = 150;
+                y = 299;
+                z = 20;
+                this->Weight = 30.0;
+            } else if (rarity == "Epic"){
+                x = 300;
+                y = 499;
+                z = 30;
+                this->Weight = 10.0;
+            } else if (rarity == "Legendary"){
+                x = 500;
+                y = 799;
+                z = 40;
+                this->Weight = 7.0;
+            } else if (rarity == "Mythical"){
+                x = 800;
+                y = 999;
+                z = 50;
+                this->Weight = 3.0;
+            }
+            uniform_int_distribution<int> rando(x,y);
+            if (rarity != "Common"){
+                uniform_int_distribution<int> b(a,z);
+                this->bonus = b(rng);
+            }
+            this->power = rando(rng);
+        };
+        void print(){cout<<name<<endl<<slot<<endl<<rarity<<endl<<power<<endl<<bonus;};
+};
+/*void WeightedRandom(Equipment entries[]){
+    random_device rd;
+    mt19937 gen(rd);
+    uniform_real_distribution<double> dis(0.0,1.0);
+    double random = dis(gen);
+    double totalWeight = 0;
+    for (int i=0; i<entries.size();i++){
+        totalWeight += entries[i].Weight;}
+    double value = random * totalWeight;
+    for(int i = 0; i < entries.size();i++){
+        value -= entries[i].Weight;
+        if(value <= 0){
+            return entries[i].name;
+        }
+    }
+    return entries[entries.size() -1].name;
+}*/
 int main()
 {
     cout << "hello world" << endl;
@@ -11,62 +82,11 @@ int main()
     string name = "iron sword";
     string slot = "weapon";
     int power = 100;
-    int bonus = 0;
-    equipment sword = equipment(rarity,name,slot,bonus);
+    int bonus = 0; 
+    Equipment sword(rarity,name,slot,bonus);
     sword.print();
 }
-class equipment{
-    private:
-        string rarity;
-        string name;
-        string slot;
-    public:
-        int power;
-        int bonus;
-        equipment(string rarity, string name,string slot,int bonus=0){
-            random_device r;
-            mt19937 rng(r);
-            int x;
-            int y;
-            if (rarity == "Common"){
-                x = 1;
-                y = 149;
-            } else if (rarity == "Rare"){
-                x = 150;
-                y = 299;
-            } else if (rarity == "Epic"){
-                x = 300;
-                y = 499;
-            } else if (rarity == "Legendary"){
-                x = 500;
-                y = 799;
-            } else if (rarity == "Mythical"){
-                x = 800;
-                y = 999;
-            }
-            uniform_int_distribution<int> rando(x,y);
-            
-        };
-        void print(){cout<<name<<endl<<slot<<endl<<rarity<<endl<<power<<endl<<bonus;};
-};
-template <typename T>
-void WeightedRandom((T item,double weight)[] entries){
-    random_device rd;
-    mt19937 gen(rd);
-    uniform_real_distribution<double> dis(0.0,1.0);
-    double random = dis(gen);
-    double totalWeight = 0;
-    for (int i=0; i<entries.Length;i++){
-        totalWeight += entries[i].Weight;}
-    double value = random * totalWeight;
-    for(int i = 0; i < entries.Length;i++){
-        value -= entries[i].Weight;
-        if(value <= 0){
-            return entries[i].Item;
-        }
-    }
-    return entries[entries.Length -1].Item;
-}
+
 /*
 coding idea
 create a luck based system that gives loot and stuff
